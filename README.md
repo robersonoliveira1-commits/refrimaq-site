@@ -28,3 +28,7 @@ npm run typecheck # checagem TypeScript
 npm run lint      # ESLint
 npm run build     # build de produção (dist/)
 ```
+
+## Deploy no Render e Domínio (`refrimaqrs.com.br`)
+
+O repositório já conta com [`render.yaml`](./render.yaml) (Blueprint pronto para **Static Site** no Render com redirects das URLs antigas, headers de segurança e cache) e o roteiro completo de virada de DNS sem interromper e-mails em [`DEPLOY_E_DOMINIO.md`](./DEPLOY_E_DOMINIO.md).

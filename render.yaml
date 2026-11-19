@@ -1,0 +1,67 @@
+# Render Blueprint — Novo Site Institucional e Catálogo Refrimaq
+# Docs: https://render.com/docs/blueprint-spec
+# Como usar: No painel do Render, clique em "New +" -> "Blueprint" e selecione este repositório.
+
+services:
+  - type: web
+    name: refrimaq-site
+    runtime: static
+    branch: main
+    buildCommand: npm ci && npm run build
+    staticPublishPath: ./dist
+    pullRequestPreviewsEnabled: false
+    envVars:
+      # Preencha no primeiro deploy com os mesmos valores do Refrimaq Connect (Supabase -> Connect).
+      # sync: false evita sobrescrever as credenciais em atualizações futuras do Blueprint.
+      - key: VITE_SUPABASE_URL
+        sync: false
+      - key: VITE_SUPABASE_ANON_KEY
+        sync: false
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: SAMEORIGIN
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+      - path: /assets/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /media/*
+        name: Cache-Control
+        value: public, max-age=604800, stale-while-revalidate=86400
+    routes:
+      # Preserva URLs antigas de refrimaqrs.com.br (Google, Instagram, WhatsApp e favoritos)
+      - type: redirect
+        source: /home
+        destination: /
+      - type: redirect
+        source: /home/
+        destination: /
+      - type: redirect
+        source: /produtos
+        destination: /#catalogo
+      - type: redirect
+        source: /produtos/*
+        destination: /#catalogo
+      - type: redirect
+        source: /servicos
+        destination: /#servicos
+      - type: redirect
+        source: /quem-somos
+        destination: /#sobre
+      - type: redirect
+        source: /contato
+        destination: /#contato
+      # Fallback SPA para qualquer outra rota
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    # Após testar em https://refrimaq-site.onrender.com, adicione o domínio pelo painel
+    # (Settings -> Custom Domains) ou descomente o bloco abaixo:
+    # domains:
+    #   - refrimaqrs.com.br
+    #   - www.refrimaqrs.com.br
