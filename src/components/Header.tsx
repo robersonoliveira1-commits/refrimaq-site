@@ -30,6 +30,7 @@ interface HeaderProps {
   onSearchSubmit: (q: string) => void;
   onInspectProduct: (product: CatalogProduct) => void;
   onOpenCart: () => void;
+  onOpenServiceVisit: () => void;
   onGoHome: () => void;
   onGoSection: (sectionId: string) => void;
 }
@@ -44,6 +45,7 @@ export default function Header({
   onSearchSubmit,
   onInspectProduct,
   onOpenCart,
+  onOpenServiceVisit,
   onGoHome,
   onGoSection,
 }: HeaderProps) {
@@ -233,13 +235,15 @@ export default function Header({
               )}
             </div>
 
-            {/* Serviços Técnicos */}
+            {/* Serviços Técnicos — Agendamento de Visita Técnica */}
             <button
               type="button"
-              onClick={() => onGoSection('servicos')}
-              className="hidden sm:flex h-10 px-3 rounded-[10px] items-center gap-2 text-sm text-ink-600 hover:text-ink-900 hover:bg-ink-100 transition-colors"
+              onClick={onOpenServiceVisit}
+              aria-label="Agendar visita técnica"
+              title="Agendar visita técnica (Corretivo, Sanitização ou Projeto)"
+              className="flex h-10 px-2.5 sm:px-3 rounded-[10px] items-center gap-2 text-sm text-ink-700 hover:text-brand-600 hover:bg-brand-50/70 border border-transparent hover:border-brand-100 transition-colors"
             >
-              <Wrench size={18} strokeWidth={1.5} className="text-ink-500" />
+              <Wrench size={18} strokeWidth={1.5} className="text-brand-600 sm:text-ink-500" />
               <span className="hidden xl:inline font-medium">Serviços</span>
             </button>
 
@@ -366,6 +370,17 @@ export default function Header({
             </button>
           ))}
           <div className="pt-2 mt-2 border-t border-white/10 flex flex-col gap-1">
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenServiceVisit();
+              }}
+              className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-white bg-brand-500/20 border border-brand-500/40 hover:bg-brand-500/30 flex items-center gap-2"
+            >
+              <Wrench size={15} strokeWidth={1.5} />
+              Agendar visita técnica
+            </button>
             <button
               type="button"
               onClick={() => {

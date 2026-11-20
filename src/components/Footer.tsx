@@ -8,13 +8,19 @@ import {
   REFRIMAQ_WHATSAPP_SECONDARY,
 } from '../lib/quoteEngine';
 import { CATEGORIES } from '../data/catalog';
+import { ServiceActivityType } from '../lib/serviceVisitEngine';
 
 interface FooterProps {
   onSelectCategory: (cat: CategoryId) => void;
   onGoSection: (sectionId: string) => void;
+  onOpenServiceVisit: (activity?: ServiceActivityType) => void;
 }
 
-export default function Footer({ onSelectCategory, onGoSection }: FooterProps) {
+export default function Footer({
+  onSelectCategory,
+  onGoSection,
+  onOpenServiceVisit,
+}: FooterProps) {
   const [leadName, setLeadName] = useState('');
   const [leadContact, setLeadContact] = useState('');
   const [submitted, setSubmitted] = useState(false);
@@ -133,25 +139,25 @@ export default function Footer({ onSelectCategory, onGoSection }: FooterProps) {
                 <li>
                   <button
                     type="button"
-                    onClick={() => onGoSection('servicos')}
+                    onClick={() => onOpenServiceVisit('sanitizacao')}
                     className="hover:text-brand-600 transition-colors"
                   >
-                    Manutenção preventiva
+                    Sanitização / Preventiva
                   </button>
                 </li>
                 <li>
                   <button
                     type="button"
-                    onClick={() => onGoSection('servicos')}
+                    onClick={() => onOpenServiceVisit('corretivo')}
                     className="hover:text-brand-600 transition-colors"
                   >
-                    Manutenção corretiva
+                    Chamado corretivo
                   </button>
                 </li>
                 <li>
                   <button
                     type="button"
-                    onClick={() => onGoSection('servicos')}
+                    onClick={() => onOpenServiceVisit('projeto_instalacao')}
                     className="hover:text-brand-600 transition-colors"
                   >
                     Projetos e instalações

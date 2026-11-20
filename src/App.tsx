@@ -20,7 +20,9 @@ import CatalogExplorer from './components/CatalogExplorer';
 import ServicesAndAbout from './components/ServicesAndAbout';
 import ProductModal from './components/ProductModal';
 import QuoteCartDrawer from './components/QuoteCartDrawer';
+import ServiceVisitModal from './components/ServiceVisitModal';
 import Footer from './components/Footer';
+import { ServiceActivityType } from './lib/serviceVisitEngine';
 
 export default function App() {
   const [products, setProducts] = useState<CatalogProduct[]>(CATALOG_PRODUCTS);
@@ -28,6 +30,8 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [cart, setCart] = useState<QuoteCartItem[]>([]);
   const [cartOpen, setCartOpen] = useState(false);
+  const [serviceVisitOpen, setServiceVisitOpen] = useState(false);
+  const [serviceVisitActivity, setServiceVisitActivity] = useState<ServiceActivityType | null>(null);
   const [inspectedProduct, setInspectedProduct] = useState<CatalogProduct | null>(null);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
 
@@ -180,6 +184,11 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
+  function handleOpenServiceVisit(activity?: ServiceActivityType) {
+    setServiceVisitActivity(activity ?? null);
+    setServiceVisitOpen(true);
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-ink-50 text-ink-900">
       <Header
@@ -192,6 +201,7 @@ export default function App() {
         onSearchSubmit={handleSearchSubmit}
         onInspectProduct={setInspectedProduct}
         onOpenCart={() => setCartOpen(true)}
+        onOpenServiceVisit={() => handleOpenServiceVisit()}
         onGoHome={handleGoHome}
         onGoSection={scrollToElement}
       />
@@ -272,11 +282,15 @@ export default function App() {
         />
 
         {/* 9. Technical Services + Quem Somos */}
-        <ServicesAndAbout />
+        <ServicesAndAbout onOpenServiceVisit={handleOpenServiceVisit} />
       </main>
 
       {/* 10. Direct Quote Strip + 5-Column Store Footer */}
-      <Footer onSelectCategory={handleSelectCategory} onGoSection={scrollToElement} />
+      <Footer
+        onSelectCategory={handleSelectCategory}
+        onGoSection={scrollToElement}
+        onOpenServiceVisit={handleOpenServiceVisit}
+      />
 
       {/* Quiet Floating WhatsApp Action (never overlapping header or cookies) */}
       <a
@@ -321,6 +335,14 @@ export default function App() {
         onClose={() => setCartOpen(false)}
         onUpdateQty={handleUpdateQty}
         onClearCart={() => setCart([])}
+      />
+
+      {/* Technical Visit Scheduling Wizard */}
+      <ServiceVisitModal
+        open={serviceVisitOpen}
+        initialActivity={serviceVisitActivity}
+        onClose={() => setServiceVisitOpen(false)}
+        onViewServicesSection={() => scrollToElement('servicos')}
       />
     </div>
   );

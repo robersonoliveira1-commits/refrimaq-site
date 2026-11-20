@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit -p tsconfig.app.json",
-    "test": "tsx tests/quoteEngine.test.ts"
+    "test": "tsx tests/quoteEngine.test.ts && tsx tests/serviceVisitEngine.test.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.119.2",

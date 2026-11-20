@@ -1,11 +1,25 @@
 import { ShieldCheck, Wrench, Compass, ArrowUpRight, CheckCircle2 } from 'lucide-react';
-import { buildWhatsAppServiceUrl } from '../lib/quoteEngine';
+import { ServiceActivityType } from '../lib/serviceVisitEngine';
 
-const SERVICES = [
+interface ServicesAndAboutProps {
+  onOpenServiceVisit: (activity?: ServiceActivityType) => void;
+}
+
+const SERVICES: {
+  code: string;
+  activity: ServiceActivityType;
+  icon: typeof ShieldCheck;
+  title: string;
+  ctaLabel: string;
+  summary: string;
+  bullets: string[];
+}[] = [
   {
     code: '01',
+    activity: 'sanitizacao',
     icon: ShieldCheck,
-    title: 'Manutenção preventiva',
+    title: 'Manutenção preventiva e sanitização',
+    ctaLabel: 'Agendar sanitização',
     summary:
       'Preserva a qualidade sensorial do chopp e evita paradas inesperadas nos horários de pico.',
     bullets: [
@@ -15,8 +29,10 @@ const SERVICES = [
   },
   {
     code: '02',
+    activity: 'corretivo',
     icon: Wrench,
     title: 'Manutenção corretiva',
+    ctaLabel: 'Abrir chamado corretivo',
     summary:
       'Diagnóstico técnico preciso e reparo com peças originais para restabelecer o desempenho de fábrica.',
     bullets: [
@@ -26,8 +42,10 @@ const SERVICES = [
   },
   {
     code: '03',
+    activity: 'projeto_instalacao',
     icon: Compass,
     title: 'Projetos e instalações',
+    ctaLabel: 'Solicitar projeto / instalação',
     summary:
       'Dimensionamento completo de balcões, pré-resfriadores e sistemas de extração sob medida.',
     bullets: [
@@ -37,7 +55,7 @@ const SERVICES = [
   },
 ];
 
-export default function ServicesAndAbout() {
+export default function ServicesAndAbout({ onOpenServiceVisit }: ServicesAndAboutProps) {
   return (
     <>
       {/* Technical Services Section — Refrimaq's real operational differentiator */}
@@ -84,15 +102,14 @@ export default function ServicesAndAbout() {
                   </div>
 
                   <div className="mt-6 pt-5 border-t border-white/10">
-                    <a
-                      href={buildWhatsAppServiceUrl(srv.title)}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-sm font-medium text-white hover:text-ink-200 inline-flex items-center gap-1.5 transition-colors"
+                    <button
+                      type="button"
+                      onClick={() => onOpenServiceVisit(srv.activity)}
+                      className="text-sm font-medium text-white hover:text-brand-100 inline-flex items-center gap-1.5 transition-colors"
                     >
-                      Solicitar atendimento técnico
+                      {srv.ctaLabel}
                       <ArrowUpRight size={15} strokeWidth={1.5} />
-                    </a>
+                    </button>
                   </div>
                 </div>
               );
