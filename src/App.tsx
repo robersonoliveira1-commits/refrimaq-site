@@ -1,7 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
-import { MessageCircle } from 'lucide-react';
+import { MessageCircle, X, ArrowRight } from 'lucide-react';
 import { CATALOG_PRODUCTS } from './data/catalog';
 import { fetchLiveSiteCatalog } from './lib/liveCatalog';
+import {
+  SiteBanner,
+  fetchLiveSiteBanners,
+  getHeroTheme,
+  resolveBannerAction,
+} from './lib/liveBanners';
 import {
   CatalogProduct,
   CategoryId,
@@ -26,6 +32,8 @@ import { ServiceActivityType } from './lib/serviceVisitEngine';
 
 export default function App() {
   const [products, setProducts] = useState<CatalogProduct[]>(CATALOG_PRODUCTS);
+  const [banners, setBanners] = useState<SiteBanner[]>([]);
+  const [announcementDismissed, setAnnouncementDismissed] = useState(false);
   const [activeCategory, setActiveCategory] = useState<CategoryId>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [cart, setCart] = useState<QuoteCartItem[]>([]);
@@ -37,11 +45,15 @@ export default function App() {
 
   useEffect(() => {
     let active = true;
-    fetchLiveSiteCatalog().then(res => {
-      if (active && res.products.length > 0) {
-        setProducts(res.products);
+    Promise.all([fetchLiveSiteCatalog(), fetchLiveSiteBanners()]).then(
+      ([catalogRes, liveBanners]) => {
+        if (!active) return;
+        if (catalogRes.products.length > 0) {
+          setProducts(catalogRes.products);
+        }
+        setBanners(liveBanners);
       }
-    });
+    );
     return () => {
       active = false;
     };
@@ -189,8 +201,79 @@ export default function App() {
     setServiceVisitOpen(true);
   }
 
+  function handleBannerAction(banner: SiteBanner) {
+    const resolved = resolveBannerAction(banner);
+    if (resolved.kind === 'category') {
+      handleSelectCategory(resolved.categoryId);
+      return;
+    }
+    if (resolved.kind === 'product') {
+      const found = products.find(p => p.slug === resolved.slug);
+      if (found) {
+        setInspectedProduct(found);
+        return;
+      }
+      scrollToElement('catalogo');
+      return;
+    }
+    if (resolved.kind === 'service_visit') {
+      handleOpenServiceVisit(resolved.activity);
+      return;
+    }
+    if (resolved.kind === 'whatsapp') {
+      window.open(resolved.url, '_blank', 'noopener,noreferrer');
+      return;
+    }
+    if (resolved.kind === 'url') {
+      if (resolved.external) {
+        window.open(resolved.href, '_blank', 'noopener,noreferrer');
+      } else if (resolved.href.startsWith('#')) {
+        scrollToElement(resolved.href.slice(1));
+      } else {
+        window.location.href = resolved.href;
+      }
+      return;
+    }
+    scrollToElement('catalogo');
+  }
+
+  const announcementBanner = useMemo(
+    () => banners.find(b => b.announcementBar.trim().length > 0) ?? null,
+    [banners]
+  );
+
   return (
     <div className="min-h-screen flex flex-col bg-ink-50 text-ink-900">
+      {/* Optional Top Campaign Announcement Strip (managed in Refrimaq Connect -> Banners / Hero) */}
+      {announcementBanner && !announcementDismissed && (
+        <div
+          className="text-xs sm:text-[13px] font-medium"
+          style={{
+            backgroundColor: getHeroTheme(announcementBanner.themePreset).announcementBg,
+            color: getHeroTheme(announcementBanner.themePreset).announcementText,
+          }}
+        >
+          <div className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 min-h-[38px] py-1.5 flex items-center justify-center gap-3 relative">
+            <button
+              type="button"
+              onClick={() => handleBannerAction(announcementBanner)}
+              className="inline-flex items-center gap-1.5 hover:underline underline-offset-2 text-center pr-6 sm:pr-0"
+            >
+              <span>{announcementBanner.announcementBar}</span>
+              <ArrowRight size={13} strokeWidth={2} className="shrink-0" />
+            </button>
+            <button
+              type="button"
+              onClick={() => setAnnouncementDismissed(true)}
+              aria-label="Fechar aviso promocional"
+              className="absolute right-3 sm:right-6 p-1 rounded hover:bg-black/15 transition-colors"
+            >
+              <X size={14} strokeWidth={2} />
+            </button>
+          </div>
+        </div>
+      )}
+
       <Header
         products={products}
         activeCategory={activeCategory}
@@ -207,12 +290,15 @@ export default function App() {
       />
 
       <main className="flex-1">
-        {/* 1. Dark Studio Product Hero */}
+        {/* 1. Dynamic Seasonal / Institutional Studio Hero */}
         <Hero
+          allProducts={products}
           featuredProducts={heroShowcase}
+          banners={banners}
           onExploreCatalog={() => scrollToElement('catalogo')}
           onAddToQuote={p => handleAddToQuote(p, 1)}
           onInspectProduct={setInspectedProduct}
+          onBannerAction={handleBannerAction}
           cartSlugs={cartSlugs}
         />
 

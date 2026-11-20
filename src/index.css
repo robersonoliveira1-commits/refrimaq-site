@@ -41,3 +41,37 @@
 .animate-enter {
   animation: subtleEnter 380ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
+
+/* Fluid Hero Display Heading — clamp(min, preferred, max) with max <= 2.5 * min (WCAG 1.4.4 zoom safe) */
+.hero-display-heading {
+  font-size: clamp(2.125rem, 1.5rem + 2.4vw, 3.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.028em;
+}
+
+/* Native Scroll-Snap Hero Carousel (modern-web-guidance: carousel) */
+.hero-carousel-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  /* Contain only the horizontal axis so vertical page scrolling never locks */
+  overscroll-behavior-x: contain;
+  touch-action: manipulation;
+  scrollbar-width: none;
+}
+
+.hero-carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-carousel-track {
+    scroll-behavior: smooth;
+  }
+}
+
+.hero-carousel-slide {
+  flex: 0 0 100%;
+  min-width: 100%;
+  scroll-snap-align: center;
+}
