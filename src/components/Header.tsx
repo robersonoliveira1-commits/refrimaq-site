@@ -116,7 +116,7 @@ export default function Header({
                 value={searchQuery}
                 onFocus={() => setSearchFocused(true)}
                 onChange={e => onSearchChange(e.target.value)}
-                placeholder="Buscar chopeiras, torres, barris, peças ou código"
+                placeholder="Buscar chopeiras, torres, peças ou código"
                 className="w-full h-11 pl-4 pr-11 rounded-[10px] bg-ink-100 border border-transparent focus:bg-white focus:border-brand-500 focus:outline-none text-sm text-ink-900 placeholder:text-ink-500 transition-colors"
               />
               <button

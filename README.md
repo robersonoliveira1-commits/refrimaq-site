@@ -1,6 +1,6 @@
 # Refrimaq Refrigeração — Novo Site Comercial
 
-Vitrine comercial e canal de cotação da **Refrimaq Refrigeração**, representante exclusiva **Memo** no Rio Grande do Sul, representante **Kegsbrasil** e assistência técnica especializada em chopeiras, torres de chopp, pré-resfriadores, barris e peças originais.
+Vitrine comercial e canal de cotação da **Refrimaq Refrigeração**, representante exclusiva **Memo** no Rio Grande do Sul e assistência técnica especializada em chopeiras, torres de chopp, pré-resfriadores, gela canecas e peças originais.
 
 ## Recursos
 

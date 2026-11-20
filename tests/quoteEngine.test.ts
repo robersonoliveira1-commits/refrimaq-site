@@ -54,18 +54,18 @@ const SAMPLE_PRODUCTS: CatalogProduct[] = [
   },
   {
     id: '3',
-    slug: 'barril-30l-slim',
-    title: 'Barril de 30L Slim Aço Inox',
-    categoryId: 'barris',
-    categoryLabel: 'Barris Kegsbrasil',
+    slug: 'gela-canecas-memo',
+    title: 'Gela Canecas Memo Aço Inox',
+    categoryId: 'gela-canecas',
+    categoryLabel: 'Gela Canecas',
     price: null,
     priceLabel: 'Valor sob consulta',
     installments: 'Até 10x sem juros',
-    description: 'Barril de chopp em aço inox 304 Kegsbrasil.',
-    specs: '30 L · Inox',
-    image: '/media/products/barril.png',
+    description: 'Ultracongelador de canecas em aço inox 304 Memo.',
+    specs: 'Inox 304',
+    image: '/media/products/gela-canecas-memo.jpg',
     featured: false,
-    brand: 'Kegsbrasil',
+    brand: 'Memo',
   },
 ];
 
@@ -83,17 +83,17 @@ test('parsePriceBrl parses Brazilian currency and returns null for sob consulta'
 test('extractTechSpecBadge builds concise engineering spec labels', () => {
   assert.equal(extractTechSpecBadge('Chopeira Elétrica Memo Hug 70L/h 220v - 2 Torneiras'), '70 L/h · 2 vias');
   assert.equal(extractTechSpecBadge('Caixa Térmica Fest Ice Memo - 360 Litros'), '360 L');
-  assert.equal(extractTechSpecBadge('Barril de 30L Slim', 'Aço inox 304'), '30 L');
+  assert.equal(extractTechSpecBadge('Torre Naja Plus Memo', 'Aço inox 304'), 'Inox 304');
   assert.equal(extractTechSpecBadge('Kit Extração de CO2 com Regulador'), 'Extração CO2');
 });
 
 test('filterProducts handles accent-insensitive search, itemCode search, category filter, and sorting', () => {
   assert.equal(filterProducts(SAMPLE_PRODUCTS, { query: 'eletrica' }).length, 1);
-  assert.equal(filterProducts(SAMPLE_PRODUCTS, { query: 'kegsbrasil' }).length, 1);
+  assert.equal(filterProducts(SAMPLE_PRODUCTS, { query: 'ultracongelador' }).length, 1);
   assert.equal(filterProducts(SAMPLE_PRODUCTS, { query: 'MEMO-BOND-01' }).length, 1);
   assert.equal(filterProducts(SAMPLE_PRODUCTS, { categoryId: 'acessorios' }).length, 1);
   const byName = filterProducts(SAMPLE_PRODUCTS, { sortBy: 'name_asc' });
-  assert.equal(byName[0].slug, 'barril-30l-slim');
+  assert.equal(byName[0].slug, 'carrinho-bond-chopp');
 });
 
 test('quote cart add/update/summary and WhatsApp message encoding with itemCode', () => {

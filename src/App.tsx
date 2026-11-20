@@ -134,23 +134,23 @@ export default function App() {
     return [...towers.slice(0, 4), ...pre.slice(0, 4)];
   }, [products]);
 
-  const barrelsAndParts = useMemo(() => {
+  const partsAndAccessories = useMemo(() => {
     const prioritySlugs = [
-      'barril-de-30l-slim',
       'carrinho-bond-chopp',
       'kit-de-extracao-de-chopp-sem-cilindro',
       'cilindro-de-gas-co2-4-5kg-em-aluminio-sem-carga',
-      'barril-de-50l-euro',
       'torneira-italia-mundi-de-chopp-curta-5-8',
       'sanitizadora-portatil-a-gas-para-assepsia-de-chopeira',
       'caixa-termica-fest-ice-memo-360-litros',
+      'regulador-de-pressao-co2-memo-para-chopeira',
+      'capa-protetora-de-chopeira',
     ];
     const picked = prioritySlugs
       .map(s => products.find(p => p.slug === s))
       .filter((p): p is CatalogProduct => Boolean(p));
     if (picked.length >= 4) return picked;
     return products
-      .filter(p => p.categoryId === 'barris' || p.categoryId === 'acessorios')
+      .filter(p => p.categoryId === 'acessorios')
       .slice(0, 8);
   }, [products]);
 
@@ -305,10 +305,10 @@ export default function App() {
         {/* 2. 5-Column Trust & Benefits Bar */}
         <TrustBar />
 
-        {/* 3. Shelf 1: Destaques Refrimaq (Top linha Memo & Kegsbrasil) */}
+        {/* 3. Shelf 1: Destaques Refrimaq (Top linha Memo) */}
         <ProductShelf
           title="Destaques da Refrimaq"
-          subtitle="Equipamentos mais procurados da linha Memo e Kegsbrasil"
+          subtitle="Equipamentos mais procurados da linha Memo"
           products={topHighlights}
           cartSlugs={cartSlugs}
           onAddToQuote={p => handleAddToQuote(p, 1)}
@@ -344,11 +344,11 @@ export default function App() {
           onViewAll={() => handleSelectCategory('torres')}
         />
 
-        {/* 7. Shelf 4: Barris Kegsbrasil e Acessórios */}
+        {/* 7. Shelf 4: Peças Originais e Acessórios */}
         <ProductShelf
-          title="Barris Kegsbrasil, peças e acessórios"
-          subtitle="Barris em aço inox, kits de extração, cilindros CO2, torneiras e assepsia"
-          products={barrelsAndParts}
+          title="Peças originais e acessórios"
+          subtitle="Kits de extração, cilindros CO2, torneiras, caixas térmicas e assepsia"
+          products={partsAndAccessories}
           cartSlugs={cartSlugs}
           onAddToQuote={p => handleAddToQuote(p, 1)}
           onInspectProduct={setInspectedProduct}

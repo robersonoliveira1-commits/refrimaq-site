@@ -11,7 +11,7 @@ const FEATURED_CATEGORY_IDS: Array<Exclude<CategoryId, 'all'>> = [
   'chopeiras-eletricas',
   'chopeiras-gelo',
   'torres',
-  'barris',
+  'pre-resfriadores',
 ];
 
 export default function CategoryBannerGrid({

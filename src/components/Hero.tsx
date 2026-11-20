@@ -156,11 +156,11 @@ function DefaultInstitutionalHero({
             <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-xs font-mono text-ink-400">
               <span>Representante exclusiva Memo no RS</span>
               <span aria-hidden="true">·</span>
-              <span>Barris Kegsbrasil</span>
+              <span>Assistência técnica especializada</span>
             </div>
 
             <h1 className="hero-display-heading font-medium text-white max-w-xl">
-              Chopeiras, torres e barris com engenharia de balcão
+              Chopeiras, torres e acessórios com engenharia de balcão
             </h1>
 
             <p className="text-base sm:text-lg leading-[1.55] text-ink-400 max-w-lg font-normal">

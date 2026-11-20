@@ -18,8 +18,8 @@ const BENEFITS = [
   },
   {
     icon: ShieldCheck,
-    title: 'Barris Kegsbrasil',
-    subtitle: 'Aço inox com garantia e procedência',
+    title: 'Peças originais Memo',
+    subtitle: 'Reposição oficial com garantia e procedência',
   },
   {
     icon: Wrench,

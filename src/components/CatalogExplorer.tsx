@@ -61,7 +61,7 @@ export default function CatalogExplorer({
                 ? `${filtered.length} resultado(s) para "${searchQuery.trim()}"`
                 : activeMeta
                   ? `${activeMeta.tagline} · ${filtered.length} itens`
-                  : `${filtered.length} equipamentos, barris e peças originais disponíveis para cotação`}
+                  : `${filtered.length} equipamentos e peças originais disponíveis para cotação`}
             </p>
           </div>
 

@@ -135,23 +135,21 @@ export default function ServicesAndAbout({ onOpenServiceVisit }: ServicesAndAbou
                 cervejeiras, pré-resfriadores e acessórios.
               </p>
               <p className="text-sm sm:text-base text-ink-600 leading-relaxed">
-                Também somos representantes da <strong>Kegsbrasil</strong>, maior importador de
-                barris de aço inox do Brasil, oferecendo suporte técnico especializado, foco em
-                segurança operacional e redução de custos de manutenção para nossos clientes.
+                Oferecemos suporte técnico especializado, peças originais de reposição, foco em
+                segurança operacional e redução de custos de manutenção para bares, restaurantes,
+                cervejarias e eventos.
               </p>
             </div>
 
             <div className="lg:col-span-5 grid grid-cols-1 gap-4">
               <div className="bg-ink-50 border border-ink-200 rounded-[12px] p-5">
-                <p className="font-mono text-xs text-ink-500">Parcerias oficiais</p>
-                <div className="mt-3 grid grid-cols-2 gap-3">
+                <p className="font-mono text-xs text-ink-500">Parceria oficial</p>
+                <div className="mt-3">
                   <div className="bg-white border border-ink-200 rounded-[8px] p-3.5">
                     <p className="text-sm font-medium text-ink-900">Memo</p>
-                    <p className="text-xs text-ink-500 mt-1">Representação exclusiva no RS</p>
-                  </div>
-                  <div className="bg-white border border-ink-200 rounded-[8px] p-3.5">
-                    <p className="text-sm font-medium text-ink-900">Kegsbrasil</p>
-                    <p className="text-xs text-ink-500 mt-1">Barris em aço inox 304</p>
+                    <p className="text-xs text-ink-500 mt-1">
+                      Representação exclusiva no Rio Grande do Sul em chopeiras, torres, pré-resfriadores e peças originais
+                    </p>
                   </div>
                 </div>
               </div>

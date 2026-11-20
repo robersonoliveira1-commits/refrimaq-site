@@ -97,8 +97,8 @@ export default function Footer({
                 className="h-12 w-auto object-contain"
               />
               <p className="text-xs text-ink-500 leading-relaxed">
-                Soluções em refrigeração para chopp e pós-mix. Representante exclusiva Memo no RS e
-                representante Kegsbrasil.
+                Soluções em refrigeração para chopp e pós-mix. Representante exclusiva Memo no RS
+                com assistência técnica especializada.
               </p>
               <p className="font-mono text-xs text-ink-500 tabular-nums">
                 CNPJ {REFRIMAQ_CNPJ}

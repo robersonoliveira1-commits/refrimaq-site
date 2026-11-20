@@ -90,7 +90,7 @@ export default function QuoteCartDrawer({
               </div>
               <p className="text-sm font-medium text-ink-900">Sua lista de cotação está vazia</p>
               <p className="text-xs text-ink-500 max-w-xs mx-auto leading-relaxed">
-                Adicione chopeiras, torres, barris ou peças do catálogo para enviar o pedido
+                Adicione chopeiras, torres ou peças do catálogo para enviar o pedido
                 estruturado direto para nossa equipe no WhatsApp.
               </p>
             </div>

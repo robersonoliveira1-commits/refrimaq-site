@@ -4,7 +4,6 @@ export type CategoryId =
   | 'chopeiras-gelo'
   | 'torres'
   | 'pre-resfriadores'
-  | 'barris'
   | 'gela-canecas'
   | 'acessorios';
 
@@ -118,7 +117,6 @@ export function extractTechSpecBadge(title: string, description = ''): string {
     else if (/naja|torre/i.test(source)) parts.push('Torre Memo');
     else if (/sanitiza|assepsia|detergente/i.test(source)) parts.push('Assepsia');
     else if (/co2|cilindro|regulador|extrator/i.test(source)) parts.push('Extração CO2');
-    else if (/barril/i.test(source)) parts.push('Inox Kegsbrasil');
     else parts.push('Linha Memo');
   }
 
@@ -173,8 +171,7 @@ export function filterProducts(
       'chopeiras-gelo': 3,
       'pre-resfriadores': 4,
       'gela-canecas': 5,
-      barris: 6,
-      acessorios: 7,
+      acessorios: 6,
     };
     const ra = catRank[a.categoryId] ?? 9;
     const rb = catRank[b.categoryId] ?? 9;
