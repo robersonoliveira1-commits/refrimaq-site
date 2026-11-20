@@ -39,6 +39,7 @@ const SAMPLE_PRODUCTS: CatalogProduct[] = [
   {
     id: '2',
     slug: 'carrinho-bond-chopp',
+    itemCode: 'MEMO-BOND-01',
     title: 'Carrinho Bond Chopp',
     categoryId: 'acessorios',
     categoryLabel: 'Acessórios',
@@ -86,15 +87,16 @@ test('extractTechSpecBadge builds concise engineering spec labels', () => {
   assert.equal(extractTechSpecBadge('Kit Extração de CO2 com Regulador'), 'Extração CO2');
 });
 
-test('filterProducts handles accent-insensitive search, category filter, and sorting', () => {
+test('filterProducts handles accent-insensitive search, itemCode search, category filter, and sorting', () => {
   assert.equal(filterProducts(SAMPLE_PRODUCTS, { query: 'eletrica' }).length, 1);
   assert.equal(filterProducts(SAMPLE_PRODUCTS, { query: 'kegsbrasil' }).length, 1);
+  assert.equal(filterProducts(SAMPLE_PRODUCTS, { query: 'MEMO-BOND-01' }).length, 1);
   assert.equal(filterProducts(SAMPLE_PRODUCTS, { categoryId: 'acessorios' }).length, 1);
   const byName = filterProducts(SAMPLE_PRODUCTS, { sortBy: 'name_asc' });
   assert.equal(byName[0].slug, 'barril-30l-slim');
 });
 
-test('quote cart add/update/summary and WhatsApp message encoding', () => {
+test('quote cart add/update/summary and WhatsApp message encoding with itemCode', () => {
   let cart = addOrUpdateQuoteItem([], SAMPLE_PRODUCTS[0], 1);
   cart = addOrUpdateQuoteItem(cart, SAMPLE_PRODUCTS[1], 2);
   cart = setQuoteItemQty(cart, 'chopeira-hug-70', 2);
@@ -109,7 +111,7 @@ test('quote cart add/update/summary and WhatsApp message encoding', () => {
   assert.ok(waUrl.startsWith('https://wa.me/5551985747069?text='));
   const decoded = decodeURIComponent(waUrl.split('text=')[1]);
   assert.ok(decoded.includes('2x Chopeira Elétrica Memo Hug 70L/h'));
-  assert.ok(decoded.includes('2x Carrinho Bond Chopp'));
+  assert.ok(decoded.includes('2x [Cód. MEMO-BOND-01] Carrinho Bond Chopp'));
   assert.ok(decoded.includes('Bar do Sul'));
   assert.ok(decoded.includes('Porto Alegre/RS'));
 

@@ -15,6 +15,7 @@ const VALID_CATEGORY_SET = new Set<string>(CATEGORIES.map(c => c.id));
 interface RawSiteProduct {
   id: string;
   slug: string;
+  item_code?: string | null;
   title: string;
   category_id: string | null;
   category_label: string | null;
@@ -25,6 +26,17 @@ interface RawSiteProduct {
   image_url: string | null;
   featured: boolean | null;
   active: boolean | null;
+}
+
+const ITEM_CODE_TAG_RE = /\s*\[C[oó]d:\s*([^\]]+)\]\s*/gi;
+
+function extractFallbackItemCode(description: string | null | undefined): string {
+  const match = (description ?? '').match(/\[C[oó]d:\s*([^\]]+)\]/i);
+  return match ? match[1].replace(/\s+/g, ' ').trim() : '';
+}
+
+function stripFallbackItemCode(description: string | null | undefined): string {
+  return (description ?? '').replace(ITEM_CODE_TAG_RE, ' ').replace(/\s+\n/g, '\n').trim();
 }
 
 const FALLBACK_BY_SLUG = new Map<string, CatalogProduct>(
@@ -53,8 +65,10 @@ function mapRowToCatalogProduct(row: RawSiteProduct): CatalogProduct {
   const fallbackLocal = FALLBACK_BY_SLUG.get(row.slug);
   const image = (row.image_url ?? '').trim() || fallbackLocal?.image || '/media/logo-dark.svg';
   const title = (row.title ?? '').trim() || 'Equipamento Refrimaq';
+  const rawDescription = row.description ?? '';
+  const itemCode = (row.item_code ?? '').trim() || extractFallbackItemCode(rawDescription);
   const description =
-    (row.description ?? '').trim() ||
+    stripFallbackItemCode(rawDescription) ||
     fallbackLocal?.description ||
     `Equipamento da linha ${categoryLabel} fornecido pela Refrimaq com suporte técnico especializado.`;
   const specs = (row.specs ?? '').trim() || extractTechSpecBadge(title, description);
@@ -62,6 +76,7 @@ function mapRowToCatalogProduct(row: RawSiteProduct): CatalogProduct {
   return {
     id: row.id,
     slug: row.slug,
+    ...(itemCode ? { itemCode } : {}),
     title,
     categoryId,
     categoryLabel,
@@ -99,9 +114,7 @@ export async function fetchLiveSiteCatalog(): Promise<{
     while (hasMore) {
       const { data, error } = await supabase
         .from('site_products')
-        .select(
-          'id, slug, title, category_id, category_label, brand, price, specs, description, image_url, featured, active'
-        )
+        .select('*')
         .eq('active', true)
         .order('sort_order', { ascending: true })
         .order('title', { ascending: true })

@@ -57,8 +57,16 @@ export default function ProductModal({
         className="bg-white w-full sm:max-w-3xl max-h-[92vh] rounded-t-[16px] sm:rounded-[16px] overflow-hidden shadow-[0_16px_48px_rgba(0,0,0,0.2)] flex flex-col animate-enter"
       >
         <div className="px-6 py-4 border-b border-ink-200 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-2 text-xs text-ink-500 min-w-0">
+          <div className="flex items-center gap-2 text-xs text-ink-500 min-w-0 flex-wrap">
             <span className="truncate">{product.categoryLabel}</span>
+            {product.itemCode && (
+              <>
+                <span aria-hidden="true">·</span>
+                <span className="font-mono font-medium text-brand-700 bg-brand-50 border border-brand-500/20 px-2 py-0.5 rounded-[4px] shrink-0">
+                  Cód. {product.itemCode}
+                </span>
+              </>
+            )}
             <span aria-hidden="true">·</span>
             <span className="font-mono text-ink-700 bg-ink-100 px-2 py-0.5 rounded-[4px] shrink-0">
               {product.specs}

@@ -13,6 +13,7 @@ export type CatalogSort = 'featured' | 'name_asc' | 'price_asc' | 'price_desc';
 export interface CatalogProduct {
   id: string;
   slug: string;
+  itemCode?: string;
   title: string;
   categoryId: Exclude<CategoryId, 'all'>;
   categoryLabel: string;
@@ -139,7 +140,9 @@ export function filterProducts(
   const filtered = products.filter(p => {
     if (categoryId !== 'all' && p.categoryId !== categoryId) return false;
     if (!q) return true;
-    const hay = normalizeText(`${p.title} ${p.categoryLabel} ${p.description} ${p.specs} ${p.brand ?? ''}`);
+    const hay = normalizeText(
+      `${p.itemCode ?? ''} ${p.title} ${p.categoryLabel} ${p.description} ${p.specs} ${p.brand ?? ''}`
+    );
     return hay.includes(q);
   });
 
@@ -257,8 +260,11 @@ export function buildWhatsAppQuoteUrl(
         item.product.price !== null
           ? `${formatBrl(item.product.price)}/un`
           : 'Sob consulta';
+      const codePrefix = item.product.itemCode?.trim()
+        ? `[Cód. ${item.product.itemCode.trim()}] `
+        : '';
       lines.push(
-        `${idx + 1}. ${item.quantity}x ${item.product.title} (${item.product.specs}) — ${unitInfo}`
+        `${idx + 1}. ${item.quantity}x ${codePrefix}${item.product.title} (${item.product.specs}) — ${unitInfo}`
       );
     });
 

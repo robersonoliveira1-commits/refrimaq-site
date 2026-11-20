@@ -36,7 +36,14 @@ export default function ProductCard({
 
         {/* Product Title & Price */}
         <div className="mt-3 space-y-1.5">
-          <p className="text-xs text-ink-500">{product.categoryLabel}</p>
+          <div className="flex items-center justify-between gap-2 text-xs text-ink-500">
+            <span className="truncate">{product.categoryLabel}</span>
+            {product.itemCode && (
+              <span className="font-mono text-[11px] text-ink-600 shrink-0 tabular-nums">
+                Cód. {product.itemCode}
+              </span>
+            )}
+          </div>
           <button
             type="button"
             onClick={() => onInspect(product)}

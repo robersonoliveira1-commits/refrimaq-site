@@ -116,7 +116,7 @@ export default function Header({
                 value={searchQuery}
                 onFocus={() => setSearchFocused(true)}
                 onChange={e => onSearchChange(e.target.value)}
-                placeholder="Buscar chopeiras, torres, barris ou peças"
+                placeholder="Buscar chopeiras, torres, barris, peças ou código"
                 className="w-full h-11 pl-4 pr-11 rounded-[10px] bg-ink-100 border border-transparent focus:bg-white focus:border-brand-500 focus:outline-none text-sm text-ink-900 placeholder:text-ink-500 transition-colors"
               />
               <button
@@ -153,7 +153,15 @@ export default function Header({
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-medium text-ink-900 truncate">{item.title}</p>
-                            <div className="flex items-center gap-2 mt-0.5">
+                            <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                              {item.itemCode && (
+                                <>
+                                  <span className="font-mono text-[11px] text-brand-700 font-medium">
+                                    Cód. {item.itemCode}
+                                  </span>
+                                  <span className="text-ink-400 text-[11px]">·</span>
+                                </>
+                              )}
                               <span className="font-mono text-[11px] text-ink-500">{item.specs}</span>
                               <span className="text-ink-400 text-[11px]">·</span>
                               <span className="text-xs text-ink-600 tabular-nums">{item.priceLabel}</span>

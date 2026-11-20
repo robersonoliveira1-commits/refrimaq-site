@@ -108,7 +108,14 @@ export default function QuoteCartDrawer({
                   />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-mono text-[11px] text-ink-500">{product.specs}</p>
+                  <div className="flex items-center gap-1.5 flex-wrap font-mono text-[11px] text-ink-500">
+                    {product.itemCode && (
+                      <span className="text-brand-700 bg-brand-50 px-1.5 py-0.5 rounded">
+                        Cód. {product.itemCode}
+                      </span>
+                    )}
+                    <span>{product.specs}</span>
+                  </div>
                   <p className="text-sm font-medium text-ink-900 leading-snug line-clamp-2 mt-0.5">
                     {product.title}
                   </p>
