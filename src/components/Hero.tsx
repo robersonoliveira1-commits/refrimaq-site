@@ -238,6 +238,72 @@ interface DynamicSlideProps {
   onBannerAction: (banner: SiteBanner) => void;
 }
 
+const ARTWORK_COVER_MAX_RATIO_DIFF = 1.22;
+
+function ArtworkBannerMedia({
+  desktopUrl,
+  mobileUrl,
+  alt,
+  isPrimaryLcp,
+}: {
+  desktopUrl: string;
+  mobileUrl?: string;
+  alt: string;
+  isPrimaryLcp: boolean;
+}) {
+  const [naturalRatio, setNaturalRatio] = useState<number | null>(null);
+  const [isMobileViewport, setIsMobileViewport] = useState<boolean>(() =>
+    typeof window !== 'undefined' ? window.innerWidth < 640 : false
+  );
+
+  useEffect(() => {
+    function handleResize() {
+      setIsMobileViewport(window.innerWidth < 640);
+    }
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const activeSrc = isMobileViewport && mobileUrl ? mobileUrl : desktopUrl;
+  const slotRatio = isMobileViewport ? 750 / 820 : 1920 / 580;
+  const needsAmbientContain =
+    naturalRatio !== null &&
+    Math.max(naturalRatio / slotRatio, slotRatio / naturalRatio) > ARTWORK_COVER_MAX_RATIO_DIFF;
+
+  return (
+    <>
+      {needsAmbientContain && (
+        <img
+          src={activeSrc}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover scale-110 blur-2xl brightness-[0.42] saturate-125 pointer-events-none"
+        />
+      )}
+      <picture className="relative z-10 block w-full h-full">
+        {mobileUrl && <source media="(max-width: 639px)" srcSet={mobileUrl} />}
+        <img
+          src={desktopUrl}
+          alt={alt}
+          fetchPriority={isPrimaryLcp ? 'high' : 'low'}
+          loading={isPrimaryLcp ? undefined : 'lazy'}
+          onLoad={e => {
+            const img = e.currentTarget;
+            if (img.naturalWidth > 0 && img.naturalHeight > 0) {
+              setNaturalRatio(img.naturalWidth / img.naturalHeight);
+            }
+          }}
+          className={
+            needsAmbientContain
+              ? 'w-full h-full object-contain drop-shadow-[0_12px_32px_rgba(0,0,0,0.45)] transition-transform duration-500 ease-smooth group-hover:scale-[1.01]'
+              : 'w-full h-full object-cover transition-transform duration-500 ease-smooth group-hover:scale-[1.01]'
+          }
+        />
+      </picture>
+    </>
+  );
+}
+
 function DynamicBannerSlide({
   banner,
   slideIndex,
@@ -252,47 +318,39 @@ function DynamicBannerSlide({
   const isPrimaryLcp = slideIndex === 0;
   const HeadingTag = slideIndex === 0 ? 'h1' : 'h2';
 
-  // MODE A: Full Custom Artwork (Canva / Designer Desktop + Mobile via <picture>)
+  // MODE A: Full-Bleed Edge-to-Edge Custom Artwork (100% viewport width on Desktop & Mobile)
   if (banner.mode === 'artwork') {
     return (
       <div
         className="w-full relative overflow-hidden"
         style={{ backgroundColor: theme.sectionBg }}
       >
-        <div className="max-w-[1360px] mx-auto px-0 sm:px-6 lg:px-8 sm:py-6">
-          <button
-            type="button"
-            onClick={() => onBannerAction(banner)}
-            aria-label={banner.imageAlt || banner.name}
-            className="group relative block w-full overflow-hidden sm:rounded-[16px] sm:border sm:border-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80 aspect-[15/16] sm:aspect-[1440/520] bg-ink-900"
-          >
-            <picture className="block w-full h-full">
-              {banner.mobileImageUrl && (
-                <source media="(max-width: 639px)" srcSet={banner.mobileImageUrl} />
-              )}
-              <img
-                src={banner.desktopImageUrl}
-                alt={banner.imageAlt || banner.name}
-                fetchPriority={isPrimaryLcp ? 'high' : 'low'}
-                loading={isPrimaryLcp ? undefined : 'lazy'}
-                className="w-full h-full object-cover transition-transform duration-500 ease-smooth group-hover:scale-[1.01]"
-              />
-            </picture>
+        <button
+          type="button"
+          onClick={() => onBannerAction(banner)}
+          aria-label={banner.imageAlt || banner.name}
+          className="group relative block w-full overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/80 aspect-[15/16] sm:aspect-[1920/580] sm:min-h-[340px] sm:max-h-[620px] bg-ink-950"
+        >
+          <ArtworkBannerMedia
+            desktopUrl={banner.desktopImageUrl}
+            mobileUrl={banner.mobileImageUrl}
+            alt={banner.imageAlt || banner.name}
+            isPrimaryLcp={isPrimaryLcp}
+          />
 
-            {banner.ctaLabel && (
-              <span
-                className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 h-10 sm:h-11 px-4 sm:px-5 rounded-[10px] text-xs sm:text-sm font-medium inline-flex items-center gap-2 shadow-[0_8px_24px_rgba(0,0,0,0.35)] transition-transform duration-150 group-hover:translate-x-0.5"
-                style={{
-                  backgroundColor: theme.primaryBtnBg,
-                  color: theme.primaryBtnText,
-                }}
-              >
-                {banner.ctaLabel}
-                <ArrowRight size={15} strokeWidth={1.75} />
-              </span>
-            )}
-          </button>
-        </div>
+          {banner.ctaLabel && (
+            <span
+              className="absolute z-20 bottom-14 sm:bottom-6 right-4 sm:right-8 h-10 sm:h-11 px-4 sm:px-5 rounded-[10px] text-xs sm:text-sm font-medium inline-flex items-center gap-2 shadow-[0_8px_24px_rgba(0,0,0,0.45)] transition-transform duration-150 group-hover:translate-x-0.5"
+              style={{
+                backgroundColor: theme.primaryBtnBg,
+                color: theme.primaryBtnText,
+              }}
+            >
+              {banner.ctaLabel}
+              <ArrowRight size={15} strokeWidth={1.75} />
+            </span>
+          )}
+        </button>
       </div>
     );
   }
@@ -634,10 +692,10 @@ export default function Hero({
         {statusAnnouncement}
       </p>
 
-      {/* Accessible Slide Markers (>= 24x24px hit targets, shape + color affordance for active) */}
+      {/* Accessible Floating Slide Markers (no bottom black bar; >= 28x28px hit targets) */}
       <nav
         aria-label="Escolher campanha"
-        className="flex items-center justify-center gap-2 py-3 border-t border-white/10"
+        className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex items-center justify-center gap-1 px-2.5 py-1 rounded-full bg-ink-950/65 backdrop-blur-md border border-white/15 shadow-lg"
       >
         <button
           type="button"
